@@ -1,0 +1,31 @@
+body {
+    font-family: Arial;
+}
+
+.header {
+    text-align: center;
+}
+
+.column {
+    float: left;
+}
+
+/* Set width length for the left, right and middle columns */
+.left {
+    width: 33%;
+    fill: background-color: #DBF9FC;
+}
+    
+.right {
+    width: 33%;
+}
+
+.middle {
+    width: 34%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
