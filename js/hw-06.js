@@ -62,11 +62,20 @@ function color(type) {
     if (type == "setosa") {
         return "green"
     }
+    if (type == 1) {
+      return "blue"
+    }
     if (type == "versicolor") {
         return "orange"
     }
-    else {
+    if (type == 2) {
+      return "orange"
+    }
+    if (type == "virginica") {
         return "blue"
+    }
+    if (type == 3) {
+      return "green"
     }
 }
 
@@ -124,10 +133,11 @@ d3.csv("/data/iris.csv").then((data) => {
         .data(flowers)
         .enter()
         .append("rect")                   
-            .attr("x", (d) => { return (X_SCALE3(d) + MARGINS.left); })
-            .attr("y", (d) => { return (MARGINS.bottom - Y_SCALE3(50)); })
-            .attr("width", 10)
-            .attr("height", (d) => { return (Y_SCALE3(50)); })
+            .attr("x", (d) => { return (X_SCALE3(d) + MARGINS.left - 25); })
+            .attr("y", (d) => { return (MARGINS.bottom + 50); })
+            .attr("width", 50)
+            .attr("height", (d) => { return (Y_SCALE3(1) - 45); })
+            .attr('fill', d => color(d))
         
     // Add an x axis to the vis
     FRAME3.append("g") 
