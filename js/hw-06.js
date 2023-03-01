@@ -82,7 +82,7 @@ function color(type) {
 //Read the data
 d3.csv("/data/iris.csv").then((data) => {
 
-    FRAME1.selectAll("points")  
+    var Plot1 = FRAME1.selectAll("points")  // ADDED Plot1
     .data(data) // passed from .then  
     .enter()       
     .append("circle")
@@ -105,7 +105,7 @@ d3.csv("/data/iris.csv").then((data) => {
         .call(d3.axisLeft(Y_SCALE1).ticks(10)) 
           .attr("font-size", '10px');
 
-  var MyCircle = FRAME2.selectAll("points")  // ADDED MYCIRCLE
+  var Plot2 = FRAME2.selectAll("points")  // ADDED PLOT2
     .data(data) // passed from .then  
     .enter()       
     .append("circle")
@@ -129,7 +129,7 @@ d3.csv("/data/iris.csv").then((data) => {
           .attr("font-size", '10px');
 
   const flowers = [1, 2, 3];
-  FRAME3.selectAll(".bar")
+  var Plot3 = FRAME3.selectAll(".bar") // ADD PLOT3
         .data(flowers)
         .enter()
         .append("rect")                   
@@ -154,6 +154,8 @@ d3.csv("/data/iris.csv").then((data) => {
         .attr("font-size", '10px');
 
 
+
+    // brushed scatterplot resource: https://observablehq.com/@d3/brushable-scatterplot
     FRAME2
       .call( d3.brush()                 // Add the brush feature using the d3.brush function
         .extent( [ [50,50], [FRAME_WIDTH, FRAME_HEIGHT - 50] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
@@ -161,20 +163,37 @@ d3.csv("/data/iris.csv").then((data) => {
       )
 
     function brushed({selection})  {
-      let value = [];
       if (selection) {
         const [[x0, y0], [x1, y1]] = selection;
-        value = MyCircle
+        value = Plot2
           .style("stroke", "none") // Initial stroke of non-selected circles
+          .style("opacity", 0.5)
           .filter(d => x0 <= (X_SCALE2(d.Sepal_Width) + MARGINS.left) && 
           (X_SCALE2(d.Sepal_Width) + MARGINS.left) < x1 && y0 <= (Y_SCALE2(d.Petal_Width) + MARGINS.bottom) && 
           (Y_SCALE2(d.Petal_Width) + MARGINS.bottom) < y1) // filter sets the size of the selected box and that selected points align with user selection.
           .style("stroke", "red")
+          .style("opacity", 1)
           .data();
-      } else {
-        MyCircle.style("stroke", "red");
+
+        value = Plot1
+          .style("stroke", "none") // Initial stroke of non-selected circles
+          .style("opacity", 0.5)
+          .filter(d => x0 <= (X_SCALE2(d.Sepal_Width) + MARGINS.left) && 
+          (X_SCALE2(d.Sepal_Width) + MARGINS.left) < x1 && y0 <= (Y_SCALE2(d.Petal_Width) + MARGINS.bottom) && 
+          (Y_SCALE2(d.Petal_Width) + MARGINS.bottom) < y1) // filter sets the size of the selected box and that selected points align with user selection.
+          .style("stroke", "orange")
+          .style("opacity", 1)
+          .data();
+
+        value = Plot3
+          .style("stroke", "none") // Initial stroke of non-selected bars
+          .filter(d => x0 <= (X_SCALE2(d.Sepal_Width) + MARGINS.left) && 
+          (X_SCALE2(d.Sepal_Width) + MARGINS.left) < x1 && y0 <= (Y_SCALE2(d.Petal_Width) + MARGINS.bottom) && 
+          (Y_SCALE2(d.Petal_Width) + MARGINS.bottom) < y1) // filter sets the size of the selected box and that selected points align with user selection.
+          .style("stroke", "orange")
+          .data();
+
       }
-      FRAME2.property("value", value).dispatch("input");
 
     }
 
