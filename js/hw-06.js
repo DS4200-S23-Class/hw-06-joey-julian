@@ -19,8 +19,8 @@ const FRAME2 = d3.select("#vis2")
                   .append("svg")
                     .attr("height", FRAME_HEIGHT)
                     .attr("width", FRAME_WIDTH)
-                    .attr("class", "frame"); 
-
+                    .attr("class", "frame");
+                     
 const FRAME3 = d3.select("#vis3")
                   .append("svg")
                     .attr("height", FRAME_HEIGHT)
@@ -105,7 +105,7 @@ d3.csv("/data/iris.csv").then((data) => {
         .call(d3.axisLeft(Y_SCALE1).ticks(10)) 
           .attr("font-size", '10px');
 
-  FRAME2.selectAll("points")  
+  var MyCircle = FRAME2.selectAll("points")  // ADDED MYCIRCLE
     .data(data) // passed from .then  
     .enter()       
     .append("circle")
@@ -153,26 +153,29 @@ d3.csv("/data/iris.csv").then((data) => {
         .call(d3.axisLeft(Y_SCALE3).ticks(10)) 
         .attr("font-size", '10px');
 
-    // Add brushing
+
     FRAME2
-    .call( d3.brush()                 // Add the brush feature using the d3.brush function
-    .extent( [ [0,0], [FRAME_WIDTH, FRAME_HEIGHT] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-    .on("start brush", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
-  )
+      .call( d3.brush()                 // Add the brush feature using the d3.brush function
+        .extent( [ [50,50], [FRAME_WIDTH, FRAME_HEIGHT - 50] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+        .on("start brush", brushed) // Each time the brush selection changes, trigger the 'updateChart' function
+      )
 
-// Function that is triggered when brushing is performed
-function updateChart() {
-  extent = d3.event.selection
-  FRAME1.circle.classed("selected", function(d){ return isBrushed(extent, x(d.Sepal_Width), y(d.Petal_Width) ) } )
-}
+    function brushed({selection})  {
+      let value = [];
+      if (selection) {
+        const [[x0, y0], [x1, y1]] = selection;
+        value = MyCircle
+          .style("stroke", "none") // Initial stroke of non-selected circles
+          .filter(d => x0 <= (X_SCALE2(d.Sepal_Width) + MARGINS.left) && 
+          (X_SCALE2(d.Sepal_Width) + MARGINS.left) < x1 && y0 <= (Y_SCALE2(d.Petal_Width) + MARGINS.bottom) && 
+          (Y_SCALE2(d.Petal_Width) + MARGINS.bottom) < y1) // filter sets the size of the selected box and that selected points align with user selection.
+          .style("stroke", "red")
+          .data();
+      } else {
+        MyCircle.style("stroke", "red");
+      }
+      FRAME2.property("value", value).dispatch("input");
 
-// A function that return TRUE or FALSE according if a dot is in the selection or not
-function isBrushed(brush_coords, cx, cy) {
-     var x0 = brush_coords[0][0],
-         x1 = brush_coords[1][0],
-         y0 = brush_coords[0][1],
-         y1 = brush_coords[1][1];
-    return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area
-}
+    }
 
 })
