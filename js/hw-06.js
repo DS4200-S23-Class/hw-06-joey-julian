@@ -62,7 +62,7 @@ function color(type) {
 }
 
 //Read the data
-d3.csv("/data/iris.csv").then((data) => {
+d3.csv("data/iris.csv").then((data) => {
 
     var Plot1 = FRAME1.selectAll("points")  // ADDED Plot1
     .data(data) // passed from .then  
