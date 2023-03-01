@@ -208,7 +208,7 @@ d3.csv("/data/iris.csv").then((data) => {
           (Y_SCALE2(d.Petal_Width) + MARGINS.bottom) < y1) // filter sets the size of the selected box and that selected points align with user selection.
           .style("opacity", 1)
           .style("stroke", "darkorange")
-          .style("stroke-width", "6px")
+          .style("stroke-width", "2px")
           .data();
           
       
