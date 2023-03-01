@@ -108,9 +108,10 @@ d3.csv("/data/iris.csv").then((data) => {
       .attr("x", (VIS_WIDTH - 150))             
       .attr("y", (MARGINS.top / 2))
       .attr("text-anchor", "middle")  
-      .style("font-size", "16px") 
+      .style("font-size", "16px")
+      .style("fill", "black")
       .style("text-decoration", "underline")  
-      .text("Petal_Length vs. Sepal_Length");
+      .text("Petal_Width vs. Sepal_Width");
 
     // Add an x axis to the vis  
     FRAME2.append("g") 
@@ -209,6 +210,8 @@ d3.csv("/data/iris.csv").then((data) => {
           .style("stroke", "darkorange")
           .style("stroke-width", "6px")
           .data();
+          
+      
 
       }
 
